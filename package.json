@@ -1,8 +1,10 @@
 {
   "dependencies": {
+    "archiver": "^7.0.1",
     "axios": "^1.7.9",
     "chartjs-node-canvas": "^4.1.6",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "fs": "^0.0.1-security",
     "node-cron": "^3.0.3",
     "pdfkit": "^0.16.0",

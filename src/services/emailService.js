@@ -1,12 +1,14 @@
-const Resend = require('resend');
+const { Resend } = require('resend');
 const config = require('../config/env');
+
+// Initialize Resend with the API key
 const resend = new Resend(config.resendApiKey);
 
 const sendEmail = async (email, subject, body, attachmentPath) => {
   try {
-    await resend.send({
+    await resend.emails.send({
+      from: 'your-email@example.com', // Replace with your verified sender email
       to: email,
-      from: 'your-email@example.com',
       subject,
       text: body,
       attachments: [

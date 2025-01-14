@@ -1,0 +1,29 @@
+{
+    "analytics": [
+      {
+        "sub_org_id": 1,
+        "sub_org_name": "Campus A",
+        "events_conducted": 5,
+        "total_members": 120,
+        "new_members": 20,
+        "admin_email": "adminA@example.com"
+      },
+      {
+        "sub_org_id": 2,
+        "sub_org_name": "Campus B",
+        "events_conducted": 8,
+        "total_members": 200,
+        "new_members": 30,
+        "admin_email": "adminB@example.com"
+      },
+      {
+        "sub_org_id": 3,
+        "sub_org_name": "Campus C",
+        "events_conducted": 8,
+        "total_members": 150,
+        "new_members": 30,
+        "admin_email": "adminB@example.com"
+      }
+    ]
+  }
+  

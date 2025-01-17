@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { fetchSubOrgData } = require('./src/services/apiService');
-const { generatePDF } = require('./src/services/pdfService');
-const { sendMonthlyReports } = require('./src/jobs/monthlyReportJob');
+const { fetchSubOrgData } = require('./services/apiService');
+const { generatePDF } = require('./services/pdfService');
+const { sendMonthlyReports } = require('./jobs/monthlyReportJob');
 const archiver = require('archiver');
 
 const app = express();

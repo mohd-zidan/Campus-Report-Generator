@@ -30,6 +30,7 @@ build/
 # Temporary files
 *.tmp
 *.swp
+/reports/
 
 # Test output
 /coverage/

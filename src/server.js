@@ -8,6 +8,8 @@ const archiver = require('archiver');
 
 const app = express();
 
+app.use(express.json());
+
 // Health check route
 app.get('/', (req, res) => {
   res.send('Server is running.');
@@ -31,13 +33,11 @@ app.get('/download-reports', async (req, res) => {
     console.log('Generating reports for download...');
     const data = await fetchSubOrgData();
 
-    // Create a ZIP file
     const zip = archiver('zip');
-    const zipPath = './reports.zip';
+    const zipPath = path.join(__dirname, '../reports.zip');
     const output = fs.createWriteStream(zipPath);
     zip.pipe(output);
 
-    // Generate PDFs for each sub-org and add them to the ZIP
     for (const subOrg of data) {
       const pdfPath = await generatePDF(subOrg);
       zip.file(pdfPath, { name: `${subOrg.sub_org_name}_report.pdf` });
@@ -51,8 +51,6 @@ app.get('/download-reports', async (req, res) => {
           console.error('Error during file download:', err.message);
           res.status(500).send('Failed to download reports.');
         }
-
-        // Cleanup the temporary ZIP file
         fs.unlinkSync(zipPath);
       });
     });

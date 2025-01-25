@@ -1,7 +1,7 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
-const { generateChartImage } = require('../utils/chartUtils'); // Import chart utility
+const { generateChartImage } = require('../utils/chartUtils');
 
 const generatePDF = async (data) => {
   const reportsDir = path.join(__dirname, '../../reports');
@@ -12,12 +12,12 @@ const generatePDF = async (data) => {
   }
 
   const filePath = path.join(reportsDir, `report-${data.sub_org_id}.pdf`);
+  console.log(`Generating PDF for ${data.sub_org_name} at: ${filePath}`);
+
   const doc = new PDFDocument();
+  const writeStream = fs.createWriteStream(filePath);
+  doc.pipe(writeStream);
 
-  // Pipe the PDF to the file
-  doc.pipe(fs.createWriteStream(filePath));
-
-  // Add text content
   doc.fontSize(18).text(`Report for ${data.sub_org_name}`, { align: 'center' });
   doc.moveDown();
   doc.fontSize(12).text(`Events Conducted: ${data.events_conducted}`);
@@ -25,19 +25,21 @@ const generatePDF = async (data) => {
   doc.text(`New Members: ${data.new_members}`);
   doc.moveDown();
 
-  // Generate and embed chart
   const chartPath = await generateChartImage(data);
   if (fs.existsSync(chartPath)) {
     doc.image(chartPath, { align: 'center', width: 400 });
-    doc.moveDown();
   } else {
     doc.text('Chart could not be generated.', { align: 'center' });
   }
 
-  // Finalize the document
   doc.end();
 
-  console.log(`Generated PDF for ${data.sub_org_name}: ${filePath}`);
+  await new Promise((resolve, reject) => {
+    writeStream.on('finish', resolve);
+    writeStream.on('error', reject);
+  });
+
+  console.log(`PDF successfully generated for ${data.sub_org_name}: ${filePath}`);
   return filePath;
 };
 

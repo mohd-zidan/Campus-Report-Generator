@@ -2,7 +2,6 @@ const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const path = require('path');
 
-// Initialize ChartJSNodeCanvas
 const chartCanvas = new ChartJSNodeCanvas({ width: 800, height: 600 });
 
 const generateChartImage = async (data) => {
@@ -17,12 +16,8 @@ const generateChartImage = async (data) => {
     ],
   };
 
-  const chartConfig = {
-    type: 'bar',
-    data: chartData,
-  };
+  const chartConfig = { type: 'bar', data: chartData };
 
-  // Save the chart as an image
   const chartDir = path.join(__dirname, '../../charts');
   if (!fs.existsSync(chartDir)) {
     fs.mkdirSync(chartDir, { recursive: true });
@@ -32,7 +27,6 @@ const generateChartImage = async (data) => {
   const buffer = await chartCanvas.renderToBuffer(chartConfig);
   fs.writeFileSync(chartPath, buffer);
 
-  console.log(`Generated chart for ${data.sub_org_name}: ${chartPath}`);
   return chartPath;
 };
 

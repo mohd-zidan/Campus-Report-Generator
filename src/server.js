@@ -6,7 +6,7 @@ const app = express();
 
 // Health check route
 app.get('/', (req, res) => {
-  res.send('Server is running.');
+  res.send('Campus Report Generator is running.');
 });
 
 // Trigger route to send reports via email manually

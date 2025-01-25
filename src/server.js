@@ -1,21 +1,15 @@
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const { fetchSubOrgData } = require('./services/apiService');
-const { generatePDF } = require('./services/pdfService');
 const { sendMonthlyReports } = require('./jobs/monthlyReportJob');
-const archiver = require('archiver');
+const cron = require('node-cron');
 
 const app = express();
-
-app.use(express.json());
 
 // Health check route
 app.get('/', (req, res) => {
   res.send('Server is running.');
 });
 
-// Trigger route to send reports via email
+// Trigger route to send reports via email manually
 app.post('/trigger-reports', async (req, res) => {
   try {
     console.log('Triggering report emails...');
@@ -27,36 +21,14 @@ app.post('/trigger-reports', async (req, res) => {
   }
 });
 
-// Download route to generate and download reports
-app.get('/download-reports', async (req, res) => {
+// Schedule the monthly report job
+cron.schedule('0 0 1 * *', async () => {
+  console.log('Running scheduled monthly report job...');
   try {
-    console.log('Generating reports for download...');
-    const data = await fetchSubOrgData();
-
-    const zip = archiver('zip');
-    const zipPath = path.join(__dirname, '../reports.zip');
-    const output = fs.createWriteStream(zipPath);
-    zip.pipe(output);
-
-    for (const subOrg of data) {
-      const pdfPath = await generatePDF(subOrg);
-      zip.file(pdfPath, { name: `${subOrg.sub_org_name}_report.pdf` });
-    }
-
-    zip.finalize();
-
-    output.on('close', () => {
-      res.download(zipPath, 'reports.zip', (err) => {
-        if (err) {
-          console.error('Error during file download:', err.message);
-          res.status(500).send('Failed to download reports.');
-        }
-        fs.unlinkSync(zipPath);
-      });
-    });
+    await sendMonthlyReports();
+    console.log('Monthly reports sent successfully.');
   } catch (error) {
-    console.error('Error generating reports:', error.message);
-    res.status(500).send('Failed to generate reports.');
+    console.error('Error running scheduled monthly report job:', error.message);
   }
 });
 

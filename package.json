@@ -1,4 +1,11 @@
 {
+  "name": "campus-report-generator",
+  "version": "1.0.0",
+  "description": "A brief description of your app",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
   "dependencies": {
     "archiver": "^7.0.1",
     "axios": "^1.7.9",

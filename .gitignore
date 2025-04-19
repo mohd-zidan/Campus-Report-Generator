@@ -20,7 +20,7 @@ Thumbs.db         # Windows
 .idea/
 
 # Package-lock and Yarn lock files (if you don't want to commit them)
-package-lock.json
+# package-lock.json
 yarn.lock
 
 # Build and output directories (if any)
